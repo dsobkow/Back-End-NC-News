@@ -2,18 +2,20 @@
   "name": "northcoders-news-api",
   "version": "1.0.0",
   "description": "Northcoders News API Sprint",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node listen.js",
+    "dev": "nodemon listen.js",
+    "seed:dev": "node ./seed/seed.dev.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "mongoose": "^5.0.14"
+    "lodash": "^4.17.10",
+    "mongoose": "^5.2.8"
   },
   "devDependencies": {
     "chai": "^4.1.2",

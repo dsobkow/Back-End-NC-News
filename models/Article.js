@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 const ArticleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: [true, 'Article title is required']
   },
   body: {
     type: String,
-    required: true
+    required: [true, 'Article body is required']
   },
   votes: {
     type: Number,
