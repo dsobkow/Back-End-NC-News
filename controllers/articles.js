@@ -15,7 +15,7 @@ exports.getArticles = (req, res, next) => {
 exports.getArticleById = (req, res, next) => {
     Article.findOne({ _id: req.params.article_id })
         .then(article => {
-            if (article == null) next({ status: 404, message: 'Article does not exist' })
+            if (article == null) next({ status: 400, message: 'Invalid article ID' })
             else res.status(200).send({ article })
         })
         .catch(err => {
@@ -26,7 +26,7 @@ exports.getArticleById = (req, res, next) => {
 exports.getCommentsForArticle = (req, res, next) => {
     Article.findOne({ _id: req.params.article_id })
         .then(article => {
-            if (article == null) next({ status: 404, message: 'Article does not exist' })
+            if (article == null) next({ status: 400, message: 'Invalid article ID' })
             else Comment.find({ belongs_to: req.params.article_id })
                 .then(comments => {
                     if (comments.length === 0) next({ status: 404, message: 'Article has no comments' })
@@ -45,7 +45,7 @@ exports.addCommentToArticle = (req, res, next) => {
     if (isEqual(Object.keys(req.body), ['body', 'created_by'])) {
         Article.findOne({ _id: req.params.article_id })
             .then(article => {
-                if (article === null) next({ status: 400, message: 'Article does not exist' })
+                if (article === null) next({ status: 400, message: 'Invalid article ID' })
                 else {
                   const params = {
                       body: req.body.body,
