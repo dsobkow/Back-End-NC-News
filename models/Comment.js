@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const CommentSchema = new Schema({
   body: {
     type: String,
-    required: true
+    required: [true, 'Comment body is required']
   },
   votes: {
     type: Number,
@@ -22,7 +22,7 @@ const CommentSchema = new Schema({
   created_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
-    required: true
+    required: [true, 'Created_by is required']
   }
 });
 

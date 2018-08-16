@@ -3,7 +3,7 @@ const app = express();
 const apiRouter = require('./routes/api');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const DB_URL = 'mongodb://localhost:27017/northcoders_news';
+const { DB_URL } = require('./config/db-config.js');
 
 app.use(bodyParser.json());
 
@@ -15,12 +15,13 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
   })
 
 app.use('/*', (req, res) => {
-    res.status(404).send({error: 'Page not found'});
+    res.status(404).send({message: 'Page not found'});
 });
 
 app.use((err, req, res, next) => {
-    if (err.status) res.status(err.status).send({error: err.message});
-    else res.status(500).send({error: "Internal server error"});
+    if (err.status) res.status(err.status).send({message: err.message});
+    else if (err.name === 'ValidationError') res.status(400).send({message: err.message})
+    else res.status(500).send({message: "Internal server error"});
 })
 
 module.exports = app;
