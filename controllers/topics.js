@@ -21,9 +21,9 @@ exports.getArticlesByTopic = (req, res, next) => {
 }
 
 exports.addArticletoTopic = (req, res, next) => {
-    Article.find({ belongs_to: req.params.topic_slug })
-        .then(articles => {
-            if (articles.length === 0) next({ status: 400, message: 'Invalid topic' })
+    Topic.findOne({ slug: req.params.topic_slug })
+        .then(topic => {
+            if (topic === null) next({ status: 400, message: 'Invalid topic' })
             else {
                 User.find()
                     .then(users => {
@@ -38,7 +38,7 @@ exports.addArticletoTopic = (req, res, next) => {
                                 res.status(201).send({ article_added })
                             })
                             .catch(err => {
-                                next(err)
+                                next({status:400, message: err.message})
                             })
                     })
             }

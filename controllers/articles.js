@@ -1,5 +1,6 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
+const User = require('../models/User');
 
 exports.getArticles = (req, res, next) => {
     Article.find()
@@ -43,7 +44,7 @@ exports.getCommentsForArticle = (req, res, next) => {
 exports.addCommentToArticle = (req, res, next) => {
     Article.findById(req.params.article_id)
         .then(article => {
-            if (article === null) next ({ status: 404, message: 'Article not found' })
+            if (article === null) next({ status: 404, message: 'Article not found' })
             else {
                 const params = {
                     body: req.body.body,
@@ -52,12 +53,32 @@ exports.addCommentToArticle = (req, res, next) => {
                 }
                 return Comment.create(params)
                     .then(comment_added => {
-                        res.status(201).send({ comment_added })
+                        return Comment.populate(comment_added, 'created_by')
+                    })
+                    .then(comment_added => {
+                        if (comment_added.created_by === null) next({ status: 404, message: 'User ID not found' })
+                        else res.status(201).send({ comment_added })
                     })
                     .catch(err => {
-                        next(err)
+                        if (err.name === 'ValidationError') next({status: 400, message: err.message})
+                        else next(err)
                     })
             }
+        })
+        .catch(err => {
+            next({ status: 400, message: 'Invalid article ID' })
+        })
+}
+
+exports.voteForArticle = (req, res, next) => {
+    let voteParams = {};
+    if (req.query.vote === 'up') voteParams = { $inc: { votes: 1 } };
+    else if (req.query.vote === 'down') voteParams = { $inc: { votes: -1 } };
+    else next({ status: 400, message: "Invalid query" });
+    Article.findByIdAndUpdate(req.params.article_id, voteParams, { new: true })
+        .then(votes_updated => {
+            if (votes_updated === null) next({ status: 404, message: 'Article not found' });
+            else res.status(201).send({ votes_updated })
         })
         .catch(err => {
             next({ status: 400, message: 'Invalid article ID' })

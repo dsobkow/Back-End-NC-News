@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const testData = require('../seed/testData/index.js');
 const seedDB = require('../seed/seed.js');
 const mongoose = require('mongoose');
+const Comment = require('../models/Comment.js');
 
 describe('NORTHCODERS NEWS API /api', () => {
 
@@ -121,6 +122,41 @@ describe('NORTHCODERS NEWS API /api', () => {
                     expect(res.body.message).to.equal('Article not found')
                 });
             });
+            it('PUT returns 201 and article with votes incremented by 1', () => {
+                return request.put(`/api/articles/${articleDocs[1]._id}?vote=up`)
+                .expect(201)
+                .then(res => {
+                    expect(res.body.votes_updated.votes).to.equal(1)
+                });
+            });
+            it('PUT returns 201 and article with votes decremented by 1', () => {
+                return request.put(`/api/articles/${articleDocs[1]._id}?vote=down`)
+                .expect(201)
+                .then(res => {
+                    expect(res.body.votes_updated.votes).to.equal(-1)
+                });
+            });
+            it('PUT returns 400 and error message for invalid query', () => {
+                return request.put(`/api/articles/${articleDocs[1]._id}?vote=yes`)
+                .expect(400)
+                .then(res => {
+                   expect(res.body.message).to.equal('Invalid query')
+                });
+            });
+            it('PUT returns 404 and error message for article that does not exist', () => {
+                return request.put(`/api/articles/${invalidId}?vote=up`)
+                .expect(404)
+                .then(res => {
+                    expect(res.body.message).to.equal('Article not found')
+                });
+            });
+            it('PUT returns 400 and error message for invalid article ID', () => {
+                return request.put(`/api/articles/newarticle?vote=up`)
+                .expect(400)
+                .then(res => {
+                    expect(res.body.message).to.equal('Invalid article ID')
+                });
+            });
         });
         describe('/:article_id/comments', () => {
             it('GET returns 200 and comments for a certain article', () => {
@@ -190,6 +226,84 @@ describe('NORTHCODERS NEWS API /api', () => {
                 .expect(400)
                 .then(res => {
                     expect(res.body.message).to.equal('comments validation failed: body: Comment body is required')
+                });
+            });
+        });
+    });
+    describe('/comments', () => {
+        describe('/:comment_id', () => {
+            it('PUT returns 201 and comment with votes incremented by 1', () => {
+                return request.put(`/api/comments/${commentDocs[1]._id}?vote=up`)
+                .expect(201)
+                .then(res => {
+                    expect(res.body.votes_updated.votes).to.equal(20)
+                });
+            });
+            it('PUT returns 201 and comment with votes decremented by 1', () => {
+                return request.put(`/api/comments/${commentDocs[1]._id}?vote=down`)
+                .expect(201)
+                .then(res => {
+                    expect(res.body.votes_updated.votes).to.equal(18)
+                });
+            });
+            it('PUT returns 400 and error message for invalid query', () => {
+                return request.put(`/api/comments/${commentDocs[1]._id}?vote=yes`)
+                .expect(400)
+                .then(res => {
+                   expect(res.body.message).to.equal('Invalid query')
+                });
+            });
+            it('PUT returns 404 and error message for comment that does not exist', () => {
+                return request.put(`/api/comments/${invalidId}?vote=up`)
+                .expect(404)
+                .then(res => {
+                    expect(res.body.message).to.equal('Comment not found')
+                });
+            });
+            it('PUT returns 400 and error message for invalid comment ID', () => {
+                return request.put(`/api/comments/newcomment?vote=up`)
+                .expect(400)
+                .then(res => {
+                    expect(res.body.message).to.equal('Invalid comment ID')
+                });
+            });
+            it('DELETE return 201 and removes specified comment from database', () => {
+                return request.del(`/api/comments/${commentDocs[1]._id}`)
+               .expect(201)
+                .then(res => {
+                   expect(res.body.comment_deleted.body).to.equal(' I carry a log — yes. Is it funny to you? It is not to me.');
+                });
+            });
+            it('DELETE returns 404 and error message for comment that does not exist', () => {
+                return request.del(`/api/comments/${invalidId}`)
+               .expect(404)
+                .then(res => {
+                   expect(res.body.message).to.equal('Comment not found');
+                });
+            });
+            it('DELETE returns 400 and error message for invalid comment ID', () => {
+                return request.del(`/api/comments/newcomment`)
+               .expect(400)
+                .then(res => {
+                   expect(res.body.message).to.equal('Invalid comment ID');
+                });
+            });
+        });
+    });
+    describe('/users', () => {
+        describe('/:username', () => {
+            it('GET returns 200 and a certain user', () => {
+                return request.get(`/api/users/${userDocs[0].username}`)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.user.name).to.equal('jonny');
+                });
+            });
+            it('GET returns 400 and error message for invalid username', () => {
+                return request.get(`/api/users/mark`)
+                .expect(400)
+                .then(res => {
+                    expect(res.body.message).to.equal('Invalid username');
                 });
             });
         });
