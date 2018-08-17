@@ -10,7 +10,7 @@ exports.getTopics = (req, res, next) => {
 }
 
 exports.getArticlesByTopic = (req, res, next) => {
-    Article.find({ belongs_to: req.params.topic_slug })
+        Article.find({ belongs_to: req.params.topic_slug })
         .then(articles => {
             if (articles.length === 0) next({ status: 400, message: 'Invalid topic' })
             else res.status(200).send({ articles })

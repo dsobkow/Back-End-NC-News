@@ -1,6 +1,5 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
-const User = require('../models/User');
 
 exports.getArticles = (req, res, next) => {
     Article.find()
@@ -13,7 +12,9 @@ exports.getArticles = (req, res, next) => {
 }
 
 exports.getArticleById = (req, res, next) => {
-    Article.findById(req.params.article_id)
+    Comment.countDocuments({ belongs_to: req.params.article_id })
+    .then(count => {
+        Article.findByIdAndUpdate(req.params.article_id, {comments: count}, { new: true})
         .then(article => {
             if (article === null) next({ status: 404, message: 'Article not found' })
             else res.status(200).send({ article })
@@ -21,6 +22,10 @@ exports.getArticleById = (req, res, next) => {
         .catch(err => {
             next({ status: 400, message: 'Invalid article ID' })
         })
+    })
+    .catch(err => {
+        next({ status: 400, message: 'Invalid article ID' })
+    })
 }
 
 exports.getCommentsForArticle = (req, res, next) => {

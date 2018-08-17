@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+  <title>Northcoders News API</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1>Northcoders News API</h1>
+  <h3><b><span>GET</span> /api/topics</b></h3>
+  <p>Gets all the topics</p>
+  <h3><b><span>GET</span> /api/topics/:topic_slug/articles</b></h3>
+  <p>Returns all the articles for a certain topic</p>
+  <h3><b><span>POST</span> /api/topics/:topic_slug/articles</b></h3>
+  <p>Adds a new article to a topic. This route requires a JSON body with title and body key value pairs
+    e.g: `{ "title": "new article", "body": "This is my new article content"}`</p>
+  <h3><b><span>GET</span> /api/articles</b></h3>
+  <p>Returns all articles</p>
+  <h3><b><span>GET</span> /api/articles/:article_id</b></h3>
+  <p>Returns a certain article</p>
+  <h3><b><span>GET</span> /api/articles/:article_id/comments</b></h3>
+  <p>Returns all the comments for a individual article</p>
+  <h3><b><span>POST</span> /api/articles/:article_id/comments</b></h3>
+  <p>Adds a new comment to an article. This route requires a JSON body with a comment key and value pair
+    e.g: {"comment": "This is my new comment"}</p>
+  <h3><b><span>PUT</span> /api/articles/:article_id</b></h3>
+  <p>Increments or decrements the votes of an article by one. This route requires a vote query of 'up' or 'down'
+    e.g: http://northcoders-news-api.herokuapp.com/api/articles/:article_id?vote=up</p>
+    <h3><b><span>PUT</span> /api/comments/:comment_id</b></h3>
+    <p>Increments or decrements the votes of a comment by one. This route requires a vote query of 'up' or 'down'
+        e.g: http://northcoders-news-api.herokuapp.com/api/comments/:comment_id?vote=down</p>
+        <h3><b><span>DELETE</span> /api/comments/:comment_id</b></h3>
+        <p>Deletes a comment</p>
+        <h3><b><span>GET</span> /api/users/:username</b></h3>
+        <p>Returns a JSON object with the profile data for the specified user</p>
+</body>
+</html>

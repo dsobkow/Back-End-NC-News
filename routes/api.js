@@ -10,7 +10,7 @@ apiRouter.use('/comments', commentsRouter);
 apiRouter.use('/users', usersRouter);
 
 apiRouter.get('/', (req, res, next) => {
-    res.send('Welcome to Northcoders News homepage');
+    res.status(200).render('api');
   });
 
 module.exports = apiRouter;

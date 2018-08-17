@@ -9,6 +9,9 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 mongoose.connect(DB_URL, { useNewUrlParser: true })
   .then(() => {
     console.log(`connected to ${DB_URL}...`)
@@ -20,7 +23,7 @@ app.use('/*', (req, res) => {
 
 app.use((err, req, res, next) => {
     if (err.status) res.status(err.status).send({message: err.message});
-    else if (err.name === 'ValidationError') res.status(err.status).send({message: err.message})
+    else if (err.name === 'ValidationError' || err.name === 'CastError') res.status(err.status).send({message: err.message})
     else res.status(500).send({message: "Internal server error"});
 })
 

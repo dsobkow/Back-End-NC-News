@@ -27,6 +27,10 @@ const ArticleSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
     required: true
+  },
+  comments: {
+    type: Number,
+    default: 0
   }
 });
 

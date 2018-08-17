@@ -62,7 +62,7 @@ describe('NORTHCODERS NEWS API /api', () => {
                 .send(newArticle)
                 .expect(201)
                 .then(res => {
-                    expect(res.body.article_added).to.have.all.keys('votes', '_id', 'belongs_to', 'title', 'body', 'created_by', 'created_at', '__v');
+                    expect(res.body.article_added).to.have.all.keys('votes', '_id', 'belongs_to', 'title', 'body', 'created_by', 'created_at', '__v', 'comments');
                     expect(res.body.article_added.title).to.equal('If You’re Really Brave, Adopt a Kitten!');
                 })
             });

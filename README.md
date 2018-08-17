@@ -23,6 +23,7 @@ Dependencies:
 * body-parser: ^1.18.3
 * express: ^4.16.3
 * mongoose: ^5.2.8
+* ejs: ^2.6.1
 
 Dev dependencies:
 * chai: ^4.1.2
