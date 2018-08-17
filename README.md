@@ -47,7 +47,7 @@ And start your local server:
 
 `$ npm run dev`
 
-You should see this in your integrated terminal: 
+You should see this in your terminal: 
 
 ```
 listening on 9090...

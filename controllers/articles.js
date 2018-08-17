@@ -13,19 +13,19 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticleById = (req, res, next) => {
     Comment.countDocuments({ belongs_to: req.params.article_id })
-    .then(count => {
-        Article.findByIdAndUpdate(req.params.article_id, {comments: count}, { new: true})
-        .then(article => {
-            if (article === null) next({ status: 404, message: 'Article not found' })
-            else res.status(200).send({ article })
+        .then(count => {
+            Article.findByIdAndUpdate(req.params.article_id, { comments: count }, { new: true })
+                .then(article => {
+                    if (article === null) next({ status: 404, message: 'Article not found' })
+                    else res.status(200).send({ article })
+                })
+                .catch(err => {
+                    next({ status: 400, message: 'Invalid article ID' })
+                })
         })
         .catch(err => {
             next({ status: 400, message: 'Invalid article ID' })
         })
-    })
-    .catch(err => {
-        next({ status: 400, message: 'Invalid article ID' })
-    })
 }
 
 exports.getCommentsForArticle = (req, res, next) => {
@@ -35,7 +35,10 @@ exports.getCommentsForArticle = (req, res, next) => {
             else Comment.find({ belongs_to: req.params.article_id })
                 .then(comments => {
                     if (comments.length === 0) next({ status: 404, message: 'Article has no comments' })
-                    else res.status(200).send({ comments })
+                    else return Comment.populate(comments, 'created_by')
+                        .then(comments => {
+                            res.status(200).send({ comments })
+                        })
                 })
                 .catch(err => {
                     next({ status: 400, message: 'Invalid article ID' })
@@ -65,7 +68,7 @@ exports.addCommentToArticle = (req, res, next) => {
                         else res.status(201).send({ comment_added })
                     })
                     .catch(err => {
-                        if (err.name === 'ValidationError') next({status: 400, message: err.message})
+                        if (err.name === 'ValidationError') next({ status: 400, message: err.message })
                         else next(err)
                     })
             }
