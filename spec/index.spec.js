@@ -37,12 +37,13 @@ describe('NORTHCODERS NEWS API /api', () => {
             });
         });
         describe('/:topic_slug/articles', () => {
-            it('GET returns 200 and all articles for a certain topic', () => {
+            it('GET returns 200 and all articles with comments counts for a certain topic', () => {
                 return request.get('/api/topics/cats/articles')
                 .expect(200)
                 .then(res => {
                     expect(res.body.articlesWithComments.length).to.equal(2);
                     expect(res.body.articlesWithComments[1].title).to.equal('UNCOVERED: catspiracy to bring down democracy');
+                    expect(res.body.articlesWithComments[0].comments).to.equal(2);
                 })
             });
             it('GET returns 400 and error message for invalid topic', () => {
