@@ -3,8 +3,22 @@ const Comment = require('../models/Comment');
 
 exports.getArticles = (req, res, next) => {
     Article.find()
+        .populate('created_by')
+        .lean()
         .then(articles => {
-            res.status(200).send({ articles })
+            const commentCount = articles.map(article => {
+                return Comment.countDocuments({belongs_to: article._id})
+            })
+            return Promise.all([articles, ...commentCount])
+        })
+        .then(([articles, ...commentCount]) => {
+            const articlesWithComments = articles.map((article, index) => {
+                return {
+                    ...article,
+                    comments: commentCount[index]
+                }
+            })
+            res.status(200).send({ articlesWithComments })
         })
         .catch(err => {
             next(err)
@@ -15,6 +29,8 @@ exports.getArticleById = (req, res, next) => {
     Comment.countDocuments({ belongs_to: req.params.article_id })
         .then(count => {
             Article.findByIdAndUpdate(req.params.article_id, { comments: count }, { new: true })
+                .populate('created_by')
+                .lean()
                 .then(article => {
                     if (article === null) next({ status: 404, message: 'Article not found' })
                     else res.status(200).send({ article })
@@ -84,6 +100,8 @@ exports.voteForArticle = (req, res, next) => {
     else if (req.query.vote === 'down') voteParams = { $inc: { votes: -1 } };
     else next({ status: 400, message: "Invalid query" });
     Article.findByIdAndUpdate(req.params.article_id, voteParams, { new: true })
+        .populate('created_by')
+        .lean()
         .then(votes_updated => {
             if (votes_updated === null) next({ status: 404, message: 'Article not found' });
             else res.status(201).send({ votes_updated })

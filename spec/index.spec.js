@@ -5,7 +5,6 @@ const { expect } = require('chai');
 const testData = require('../seed/testData/index.js');
 const seedDB = require('../seed/seed.js');
 const mongoose = require('mongoose');
-const Comment = require('../models/Comment.js');
 
 describe('NORTHCODERS NEWS API /api', () => {
 
@@ -42,8 +41,8 @@ describe('NORTHCODERS NEWS API /api', () => {
                 return request.get('/api/topics/cats/articles')
                 .expect(200)
                 .then(res => {
-                    expect(res.body.articles.length).to.equal(2);
-                    expect(res.body.articles[1].title).to.equal('UNCOVERED: catspiracy to bring down democracy');
+                    expect(res.body.articlesWithComments.length).to.equal(2);
+                    expect(res.body.articlesWithComments[1].title).to.equal('UNCOVERED: catspiracy to bring down democracy');
                 })
             });
             it('GET returns 400 and error message for invalid topic', () => {
@@ -92,12 +91,13 @@ describe('NORTHCODERS NEWS API /api', () => {
         });
     });
     describe('/articles', () => {
-        it('GET returns 200 and all articles', () => {
+        it('GET returns 200 and all articles with comment counts', () => {
             return request.get('/api/articles')
             .expect(200)
             .then(res => {
-                expect(res.body.articles.length).to.equal(4);
-                expect(res.body.articles[2].body).to.equal('Well? Think about it.');
+                expect(res.body.articlesWithComments.length).to.equal(4);
+                expect(res.body.articlesWithComments[2].body).to.equal('Well? Think about it.');
+                expect(res.body.articlesWithComments[1].comments).to.equal(2);
             });
         });
         describe('/:article_id', () => {
