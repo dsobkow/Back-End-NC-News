@@ -228,6 +228,30 @@ describe('NORTHCODERS NEWS API /api', () => {
                     expect(res.body.message).to.equal('comments validation failed: body: Comment body is required')
                 });
             });
+            it('POST returns 404 and error message for user that does not exist', () => {
+                const newComment = {
+                    body: 'Great article',
+                    created_by: invalidId
+                }
+                return request.post(`/api/articles/${articleDocs[0]._id}/comments`)
+                .send(newComment)
+                .expect(404)
+                .then(res => {
+                    expect(res.body.message).to.equal('User ID not found')
+                });
+            });
+            it('POST returns 400 and error message for invalid user ID', () => {
+                const newComment = {
+                    body: 'Great article',
+                    created_by: 'jonny'
+                }
+                return request.post(`/api/articles/${articleDocs[0]._id}/comments`)
+                .send(newComment)
+                .expect(400)
+                .then(res => {
+                    expect(res.body.message).to.equal('comments validation failed: created_by: Cast to ObjectID failed for value "jonny" at path "created_by"')
+                });
+            });
         });
     });
     describe('/comments', () => {
