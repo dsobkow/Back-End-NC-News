@@ -48,8 +48,8 @@ And start your local server:
 
 You should see this in your integrated terminal: 
 
-* `listening on 9090...`
-* `connected to mongodb://localhost:27017/northcoders_news...`
+`listening on 9090...`
+`connected to mongodb://localhost:27017/northcoders_news...`
 
 Now you are ready to open the app in your browser or Postman with this URL:
 
