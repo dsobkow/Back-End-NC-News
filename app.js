@@ -2,11 +2,12 @@ const express = require('express');
 const app = express();
 const apiRouter = require('./routes/api');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 const mongoose = require('mongoose');
 const DB_URL = process.env.DB_URL || require('./config/db-config.js').DB_URL;
 
 app.use(bodyParser.json());
-
+app.use(cors());
 app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
