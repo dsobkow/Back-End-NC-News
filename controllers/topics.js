@@ -2,6 +2,7 @@ const Topic = require('../models/Topic');
 const Article = require('../models/Article');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
+const { includes } = require('lodash');
 
 exports.getTopics = (req, res, next) => {
     Topic.find()
@@ -40,24 +41,21 @@ exports.addArticletoTopic = (req, res, next) => {
         .then(topic => {
             if (topic === null) next({ status: 400, message: 'Invalid topic' })
             else {
-                User.find()
-                    .then(users => {
-                        const params = {
-                            belongs_to: req.params.topic_slug,
-                            title: req.body.title,
-                            body: req.body.body,
-                            created_by: req.body.created_by
-                        }
-                        return Article.create(params)
-                            .then(comment_added => {
-                                return Comment.populate(comment_added, 'created_by')
-                            })
-                            .then(article_added => {
-                                res.status(201).send({ article_added })
-                            })
-                            .catch(err => {
-                                next({ status: 400, message: err.message })
-                            })
+                const params = {
+                    belongs_to: req.params.topic_slug,
+                    title: req.body.title,
+                    body: req.body.body,
+                    created_by: req.body.created_by
+                }
+                return Article.create(params)
+                    .then(comment_added => {
+                        return Comment.populate(comment_added, 'created_by')
+                    })
+                    .then(article_added => {
+                        res.status(201).send({ article_added })
+                    })
+                    .catch(err => {
+                        next({ status: 400, message: err.message })
                     })
             }
         })
