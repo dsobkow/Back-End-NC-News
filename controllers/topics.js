@@ -46,7 +46,7 @@ exports.addArticletoTopic = (req, res, next) => {
                             belongs_to: req.params.topic_slug,
                             title: req.body.title,
                             body: req.body.body,
-                            created_by: users[0]._id
+                            created_by: req.body.created_by
                         }
                         return Article.create(params)
                             .then(comment_added => {
