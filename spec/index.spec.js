@@ -56,7 +56,8 @@ describe('NORTHCODERS NEWS API /api', () => {
             it('POST returns 201 and article that has been added to selected topic', () => {
                 const newArticle = {
                     title: 'If You’re Really Brave, Adopt a Kitten!',
-                    body: 'Now if you are in the market for a new feline companion, we have some guidelines that can make this experience unique and wonderful. It will take a little work at first, but the reward for your efforts will be a benefit to you and your cats for many years.'
+                    body: 'Now if you are in the market for a new feline companion, we have some guidelines that can make this experience unique and wonderful. It will take a little work at first, but the reward for your efforts will be a benefit to you and your cats for many years.',
+                    created_by: userDocs[0]._id
                 }
                 return request.post('/api/topics/cats/articles')
                 .send(newArticle)
@@ -80,6 +81,7 @@ describe('NORTHCODERS NEWS API /api', () => {
             });
             it('POST returns 400 and error message if one of the keys is missing', () => {
                 const newArticle = {
+                    created_by: userDocs[0]._id,
                     body: 'Now if you are in the market for a new feline companion, we have some guidelines that can make this experience unique and wonderful. It will take a little work at first, but the reward for your efforts will be a benefit to you and your cats for many years.'
                 }
                 return request.post('/api/topics/cats/articles')
