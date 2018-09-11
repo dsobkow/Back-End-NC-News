@@ -50,7 +50,7 @@ exports.getCommentsForArticle = (req, res, next) => {
             if (article === null) next({ status: 404, message: 'Article not found' })
             else Comment.find({ belongs_to: req.params.article_id })
                 .then(comments => {
-                    if (comments.length === 0) next({ status: 404, message: 'Article has no comments' })
+                    if (comments.length === 0) res.status(200).send(null);
                     else return Comment.populate(comments, 'created_by')
                         .then(comments => {
                             res.status(200).send({ comments })
