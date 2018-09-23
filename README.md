@@ -38,13 +38,13 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const config = {
     development: {
-        DB_URL: 'mongodb_url'
+        DB_URL: 'mongodb://localhost:27017/northcoders_news'
     },
     test: {
-        DB_URL: 'mongodb_url_test'
+        DB_URL: 'mongodb://localhost:27017/northcoders_news_test'
     },
     production: {
-        DB_URL: 'mongodb_mlab_url'
+        DB_URL: 'your mlab url containing username and password'
     }
 }
 
