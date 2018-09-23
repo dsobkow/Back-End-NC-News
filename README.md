@@ -31,6 +31,26 @@ Dev dependencies:
 * nodemon: ^1.18.3
 * supertest: ^3.1.0
 
+This repositiory is missing a config folder that exports the value of DB_URL depending on the process.env.NODE_ENV. Create config directory in your project root and add a config.js file that looks like this:
+
+```javascript
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+const config = {
+    development: {
+        DB_URL: 'mongodb_url'
+    },
+    test: {
+        DB_URL: 'mongodb_url_test'
+    },
+    production: {
+        DB_URL: 'mongodb_mlab_url'
+    }
+}
+
+module.exports = config[process.env.NODE_ENV];
+```
+
 Make sure that you have MongoDB installed:
 
 `$ mongo --version`
