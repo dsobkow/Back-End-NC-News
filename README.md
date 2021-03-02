@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Welcome to Northcoders News API! This respository contains database which consists of files with various articles, users, topics and comments. The API allows for comments to be added to articles and articles to be added to topics. It also allows user to vote up or down for both articles and comments. For more information about available endpoints please check Routes section. The app has been deployed to Heroku and you can check it out here https://d-northcoders-news-api.herokuapp.com/api
+Welcome to Northcoders News API! This respository contains database which consists of files with various articles, users, topics and comments. The API allows for comments to be added to articles and articles to be added to topics. It also allows user to vote up or down for both articles and comments. For more information about available endpoints please check Routes section.
 
 ## Getting Started
 
 Clone this repository using command below:
 
-`$ git clone https://github.com/dotty11/BE2-northcoders-news`
+`$ git clone https://github.com/dsobkow/BE2-northcoders-news`
 
 ## Installation
 
@@ -18,35 +18,36 @@ Navigate to cloned repository and install all dependencies and dev dependencies 
 
 This will install the following packages:
 
-
 Dependencies:
-* body-parser: ^1.18.3
-* ejs: ^2.6.1
-* express: ^4.16.3
-* mongoose: ^5.2.8
+
+- body-parser: ^1.18.3
+- ejs: ^2.6.1
+- express: ^4.16.3
+- mongoose: ^5.2.8
 
 Dev dependencies:
-* chai: ^4.1.2
-* mocha: ^5.2.0
-* nodemon: ^1.18.3
-* supertest: ^3.1.0
+
+- chai: ^4.1.2
+- mocha: ^5.2.0
+- nodemon: ^1.18.3
+- supertest: ^3.1.0
 
 This repositiory is missing a config folder that exports the value of DB_URL depending on the process.env.NODE_ENV. Create config directory in your project root and add a config.js file that looks like this:
 
 ```javascript
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
 const config = {
-    development: {
-        DB_URL: 'mongodb://localhost:27017/northcoders_news'
-    },
-    test: {
-        DB_URL: 'mongodb://localhost:27017/northcoders_news_test'
-    },
-    production: {
-        DB_URL: 'your mlab url containing username and password'
-    }
-}
+  development: {
+    DB_URL: "mongodb://localhost:27017/northcoders_news",
+  },
+  test: {
+    DB_URL: "mongodb://localhost:27017/northcoders_news_test",
+  },
+  production: {
+    DB_URL: "your mlab url containing username and password",
+  },
+};
 
 module.exports = config[process.env.NODE_ENV];
 ```
@@ -67,7 +68,7 @@ And start your local server:
 
 `$ npm run dev`
 
-You should see this in your terminal: 
+You should see this in your terminal:
 
 ```
 listening on 9090...
@@ -92,8 +93,8 @@ The following endpoints are available:
 ```http
 GET /api
 ```
-Homepage
 
+Homepage
 
 ```http
 GET /api/topics
@@ -166,5 +167,3 @@ GET /api/users/:username
 e.g: `/api/users/mitch123`
 
 Returns a JSON object with the profile data for the specified user.
-
-
